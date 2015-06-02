@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -52,19 +53,19 @@ public class RssRequestServiceImpl implements RssRequestService{
                 titleList =  e.getElementsByTagName("description");
                 titleElem = (Element) titleList.item(0);
                 Node descNode = titleElem.getChildNodes().item(0);
+                titleList =  e.getElementsByTagName("media:thumbnail");
+                titleElem = (Element) titleList.item(1);
+                String imgurl = titleElem.getAttribute("url");
                 html = html + "<div class=\"col-sm-6 col-md-4\">"+
                 "<div class=\"thumbnail\">"+
-                "<img src=\"...\" alt=\"...\">"+
+                "<img src=" + imgurl +" alt=\"...\">"+
                 "<div class=\"caption\">"+
                   "<h3>" + titleNode.getNodeValue() + "</h3>" + 
                   "<p>" + descNode.getNodeValue() + "</p>"+
-                  "<p><a href=\"#\" class=\"btn btn-primary\" role=\"button\">Button</a> <a href=\"#\" class=\"btn btn-default\" role=\"button\">Button</a></p>"+
                 "</div>"+
              " </div>"+
             "</div>";
                 
-                System.out.println(titleNode.getNodeValue());
-                System.out.println(descNode.getNodeValue());
                 
             }
             
