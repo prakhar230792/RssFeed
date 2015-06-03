@@ -25,6 +25,13 @@ public class RssRequestServiceImpl implements RssRequestService{
 
 	@Override
 	public Feed fetchData(String map) {
+		// http://www.lifehack.org/feed
+		// http://feeds.bbci.co.uk/news/rss.xml
+		//http://feeds.feedburner.com/GoogleEarthBlog
+		//http://feeds.feedburner.com/QuickOnlineTips
+		//http://www.forbes.com/europe_news/index.xml
+		//http://www.wired.com/category/photo/feed/
+		//http://www.wired.com/category/reviews/feed/
 		String feedURL = (map.split("="))[1];
 		Document doc = null;
 		String html = "";
@@ -38,30 +45,50 @@ public class RssRequestServiceImpl implements RssRequestService{
             NodeList items = doc.getElementsByTagName("item");
             for (int i = 0; i < items.getLength(); i++)
             {
+            	String feedtitle= "No title available";
+            	String feedDecsription= "No description available";
+            	String feedMedia= "";
+            	String altMedia= "/resources/images/noimage.png";
                 Node n = items.item(i);
                 if (n.getNodeType() != Node.ELEMENT_NODE)
                     continue;
                 Element e = (Element) n;
  
                 // get the "title elem" in this item (only one)
+                
                 NodeList titleList = 
                                 e.getElementsByTagName("title");
-                Element titleElem = (Element) titleList.item(0);
- 
-                // get the "text node" in the title (only one)
-                Node titleNode = titleElem.getChildNodes().item(0);
-                titleList =  e.getElementsByTagName("description");
-                titleElem = (Element) titleList.item(0);
-                Node descNode = titleElem.getChildNodes().item(0);
-                titleList =  e.getElementsByTagName("media:thumbnail");
-                titleElem = (Element) titleList.item(1);
-                String imgurl = titleElem.getAttribute("url");
+                if(titleList != null)
+                {
+                	Element titleElem = (Element) titleList.item(0);
+                    Node titleNode = titleElem.getChildNodes().item(0);
+                    feedtitle = titleNode.getNodeValue();
+                }
+
+                NodeList descriptionList =  e.getElementsByTagName("description");
+                if(descriptionList != null)
+                {
+                	Element descElem = (Element) descriptionList.item(0);
+                    Node descNode = descElem.getChildNodes().item(0);
+                    feedDecsription = descNode.getNodeValue();
+                }
+                
+                NodeList mediaList =  e.getElementsByTagName("media:thumbnail");
+                int count = 0;
+                Element mediaElem = (Element) mediaList.item(count);
+                System.out.print(mediaList);
+                while(mediaElem != null)
+                {
+                	feedMedia = mediaElem.getAttribute("url");
+                	count++;
+                	mediaElem = (Element) mediaList.item(count);
+                }
                 html = html + "<div class=\"col-sm-6 col-md-4\">"+
                 "<div class=\"thumbnail\">"+
-                "<img src=" + imgurl +" alt=\"...\">"+
+                "<img src=\"" + feedMedia +"\" alt=\"\" style=\"max-height: 100px; max-width: 100px;\" />"+
                 "<div class=\"caption\">"+
-                  "<h3>" + titleNode.getNodeValue() + "</h3>" + 
-                  "<p>" + descNode.getNodeValue() + "</p>"+
+                  "<h3>" + feedtitle + "</h3>" + 
+                  "<p>" + feedDecsription + "</p>"+
                 "</div>"+
              " </div>"+
             "</div>";
