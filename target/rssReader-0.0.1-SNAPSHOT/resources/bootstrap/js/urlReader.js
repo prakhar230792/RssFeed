@@ -11,6 +11,7 @@ $(document).ready(function(){
         feedUrl:$("#urlText").val()
       },
       function(data){
+        $( "#rssFeed" ).empty();
         $( "#rssFeed" ).append( data['link'] );
         console.log(data['link']);
       })

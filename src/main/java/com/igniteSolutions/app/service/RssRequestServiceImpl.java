@@ -58,19 +58,26 @@ public class RssRequestServiceImpl implements RssRequestService{
                 
                 NodeList titleList = 
                                 e.getElementsByTagName("title");
-                if(titleList != null)
-                {
+                
                 	Element titleElem = (Element) titleList.item(0);
+                if(titleElem != null)
+                {
                     Node titleNode = titleElem.getChildNodes().item(0);
-                    feedtitle = titleNode.getNodeValue();
+                    if(titleNode != null)
+                    {
+                    	feedtitle = titleNode.getNodeValue();
+                    }
                 }
 
                 NodeList descriptionList =  e.getElementsByTagName("description");
-                if(descriptionList != null)
-                {
                 	Element descElem = (Element) descriptionList.item(0);
+                if(descElem != null)
+                {
                     Node descNode = descElem.getChildNodes().item(0);
-                    feedDecsription = descNode.getNodeValue();
+                    if(descNode!= null)
+                    {
+                    	feedDecsription = descNode.getNodeValue();
+                    }
                 }
                 
                 NodeList mediaList =  e.getElementsByTagName("media:thumbnail");
